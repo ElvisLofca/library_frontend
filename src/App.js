@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import {AuthProvider} from "./context/AuthContext";
 import {Container} from "react-bootstrap";
@@ -14,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import HomeScreen from "./screens/HomeScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import UserProfileScreen from "./screens/UserProfileScreen";
+import PrivateRoutes from "./PrivateRoutes";
 
 function App() {
     return (
@@ -37,7 +37,7 @@ function App() {
                                 <Route path=":id/edit/" element={<UserEditScreen/>}/>
                             </Route>
 
-                            <Route path="/books/">
+                            <Route path="/books/" element={<PrivateRoutes/>}>
                                 <Route path='' element={<BookListScreen/>}/>
                                 <Route path="add/" element={<BookAddScreen/>}/>
                                 <Route path=':id/' element={<BookDetailScreen/>}/>
