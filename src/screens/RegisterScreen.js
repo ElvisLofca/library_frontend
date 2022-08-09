@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {Button, Form} from "react-bootstrap";
+import {Alert, Button, Form} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
@@ -9,6 +9,7 @@ function RegisterScreen(props) {
     const history = useNavigate()
     let {registerUser} = useContext(AuthContext)
     const [validated, setValidated] = useState(false);
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,12 +28,23 @@ function RegisterScreen(props) {
                 'email': e.target.email.value
             };
 
-            await registerUser(user);
+          await registerUser(user)
+              .catch(error => {
+                  setError(error.message)
+              });
         }
         setValidated(true)
     }
 
     return (
+        <>
+            {error ?
+            <Alert variant='danger'>
+                {error}
+            </Alert>
+                : null
+            }
+
         <Form onSubmit={handleSubmit} noValidate validated={validated} >
             <Form.Group className="mb-3" controlId="formBasicUsername">
                 <Form.Label>Username</Form.Label>
@@ -70,6 +82,7 @@ function RegisterScreen(props) {
                 Register
             </Button>
         </Form>
+        </>
     );
 }
 

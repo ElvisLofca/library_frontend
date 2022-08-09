@@ -16,10 +16,8 @@ export const AuthProvider = ({children}) => {
     const navigate = useNavigate()
 
 
-    let register = (userToRegister) => {
-        console.log('registering')
-
-        return fetch(`/api/users/register/`, {
+    let register = async (userToRegister) => {
+        let response = await fetch(`/api/users/register/`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -27,15 +25,15 @@ export const AuthProvider = ({children}) => {
 
             body: JSON.stringify(userToRegister)
         })
-            .then(response => response.json())
 
-            .then((data) => {
-                console.log(data)
-                navigate('/login')
-            })
-            .catch((error) => {
-                console.error('detail:', error);
-            });
+        let data = await response.json()
+
+        if (response.ok) {
+            console.log(data)
+            navigate('/login')
+        } else {
+            throw new Error(data.detail)
+        }
 
     }
 

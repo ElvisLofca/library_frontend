@@ -10,7 +10,7 @@ function BookAddScreen(props) {
     const {id} = useParams()
     const history = useNavigate()
     const location = useLocation();
-    const data = location.state ? location.state.data : null;
+    let data = location.state ? location.state.data : null;
     const [book, setBook] = useState({})
     const [bookImagePreview, setBookImagePreview] = useState(data ? data.image : null)
     let {authTokens} = useContext(AuthContext)
@@ -20,13 +20,22 @@ function BookAddScreen(props) {
 
 
     useEffect(() => {
-
-        console.log(data)
-
         if(data){
             setBook(data)
         }else{
-            setBook({})
+            setBook({
+                title: "",
+                author: "",
+                description: "",
+                image: null,
+                genre: "",
+                pages: "",
+                publication_date: "",
+                is_available: false,
+                body: "",
+            })
+            setBookImagePreview(null)
+            setBookCreated(false)
         }
 
     }, [setBookCreated, location])
@@ -72,7 +81,7 @@ function BookAddScreen(props) {
     /** Upload Book Image **/
     let  UploadBookImage = async (id) => {
         console.log(id, 'uploading')
-        if(book.image) {
+        if(book.image && book.image !== bookImagePreview && id) {
             console.log(id, 'calling')
             const imageData = new FormData();
             imageData.append('image', book.image);
@@ -84,6 +93,9 @@ function BookAddScreen(props) {
                 },
                 body: imageData
             })
+        }
+        else{
+            history("/books")
         }
     }
 
@@ -100,7 +112,8 @@ function BookAddScreen(props) {
                 ? await updateBook()
                 : await addBook()
             setBookCreated(true)
-            history(`/books/${bookId}/`)
+            console.log(book)
+            history(`/books/`)
         }
 
         setValidated(true);
@@ -174,7 +187,7 @@ function BookAddScreen(props) {
 
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Is Available"
-                                 defaultChecked={book ? book.is_available : false} onChange={(e) => {setBook({...book, 'is_available': e.target.checked})}}/>
+                                 defaultChecked={book.is_available} onChange={(e) => {setBook({...book, 'is_available': e.target.checked})}}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicBody">

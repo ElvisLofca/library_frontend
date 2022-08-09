@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import AuthContext from "./context/AuthContext";
 import {Navigate, Outlet} from "react-router-dom";
 
 const PrivateRoutes = (props) => {
-    let {AuthToken} = AuthContext(AuthToken)
+    let {authTokens} = useContext(AuthContext)
+    console.log(authTokens, "Protected route token")
     return (
-        AuthToken ? <Outlet/> : <Navigate to='/login' />
+        authTokens ? <Outlet/> : <Navigate to='/login' />
     );
 }
 

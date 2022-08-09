@@ -1,17 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, Row, Col, Nav} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap'
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 function BookListScreen(props) {
     const [books, setBooks] = useState([])
     let {authTokens} = useContext(AuthContext)
+    let {user} = useContext(AuthContext)
     let {LogoutUser} = useContext(AuthContext)
 
     useEffect(() => {
         getBooks()
-    }, [])
+    }, [useLocation()])
 
 
     let getBooks = async () => {
@@ -45,7 +46,14 @@ function BookListScreen(props) {
                                 ? <LinkContainer to={`/books/${book.id}`}>
                                         <Button variant='primary'>Read Book</Button>
                                 </LinkContainer>
-                                : <p className='text-danger'>Book not available yet!</p>
+                                :
+                                <div>
+                                    <p className='text-danger'>Book not available yet!</p>
+                                    {user.is_staff ?  <Link to={`/books/${book.id}`} className='btn btn-dark me-2'>
+                                            Detail
+                                        </Link>
+                                        : null}
+                                </div>
                             }
                         </Card.Body>
                     </Card>

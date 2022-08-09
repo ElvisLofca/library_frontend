@@ -30,19 +30,24 @@ function App() {
                             <Route path='/' element={<HomeScreen/>}/>
                             <Route path='/login' element={<LoginScreen/>}/>
                             <Route path='/register' element={<RegisterScreen/>}/>
-                            <Route path="/profile" element={<UserProfileScreen/>}/>
 
-                            <Route path="/users/">
-                                <Route path='' element={<UserListScreen/>}/>
-                                <Route path=":id/edit/" element={<UserEditScreen/>}/>
+
+                            <Route element={<PrivateRoutes/>}>
+                                <Route path="/profile" element={<UserProfileScreen/>}/>
+
+                                <Route path="/users/">
+                                    <Route path='' element={<UserListScreen/>}/>
+                                    <Route path=":id/edit/" element={<UserEditScreen/>}/>
+                                </Route>
+
+                                <Route path="/books/">
+                                    <Route path='' element={<BookListScreen/>}/>
+                                    <Route path="add/" element={<BookAddScreen/>}/>
+                                    <Route path=':id/' element={<BookDetailScreen/>}/>
+                                    <Route path=":id/edit/" element={<BookAddScreen/>}/>
+                                </Route>
                             </Route>
 
-                            <Route path="/books/" element={<PrivateRoutes/>}>
-                                <Route path='' element={<BookListScreen/>}/>
-                                <Route path="add/" element={<BookAddScreen/>}/>
-                                <Route path=':id/' element={<BookDetailScreen/>}/>
-                                <Route path=":id/edit/" element={<BookAddScreen/>}/>
-                            </Route>
                         </Routes>
                     </Container>
                 </main>
